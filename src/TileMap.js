@@ -167,7 +167,7 @@ export default class TileMap {
     canvas.height = this.map.length * this.tileSize;
   }
 
-  didCollideWithEnvironment(x, y, direction) {
+  didCollideWithWall(x, y, direction) {
     if (direction == null) {
       return;
     }

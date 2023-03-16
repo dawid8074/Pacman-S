@@ -84,7 +84,7 @@ export default class Enemy {
         Number.isInteger(this.y / this.tileSize)
       ) {
         if (
-          !this.tileMap.didCollideWithEnvironment(
+          !this.tileMap.didCollideWithWall(
             this.x,
             this.y,
             newMoveDirection
@@ -98,7 +98,7 @@ export default class Enemy {
 
   #move() {
     if (
-      !this.tileMap.didCollideWithEnvironment(
+      !this.tileMap.didCollideWithWall(
         this.x,
         this.y,
         this.movingDirection

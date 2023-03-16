@@ -128,12 +128,12 @@ export default class Pacman {
   #move() {
     if (this.currentMovingDirection !== this.requestedMovingDirection) {
       if (Number.isInteger(this.x / this.tileSize) && Number.isInteger(this.y / this.tileSize)) {
-        if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.requestedMovingDirection))
+        if (!this.tileMap.didCollideWithWall(this.x, this.y, this.requestedMovingDirection))
           this.currentMovingDirection = this.requestedMovingDirection;
       }
     }
 
-    if (this.tileMap.didCollideWithEnvironment(this.x, this.y, this.currentMovingDirection)) {
+    if (this.tileMap.didCollideWithWall(this.x, this.y, this.currentMovingDirection)) {
       this.pacmanAnimationTimer = null;
       this.pacmanImageIndex = 1;
       return;
