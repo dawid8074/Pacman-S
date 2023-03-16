@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Pacman"/>
+    <meta property="og:image" src="images\pac1.png" content="the image link"/>
+    <meta property="og:description" content="Pac-man game"/>
+    <meta property="og:type" content="website"/> 
     <title>Pac-Man</title>
     <link rel="icon" type="images/x-icon" href="images/pac1.png" />
     <link rel="stylesheet" href="style.css">
@@ -13,6 +17,10 @@
     <div>
       <h1>Pac-Man</h1>
       <canvas id="gameCanvas"></canvas>
+      <div id="buttonContainer">
+        <button id="restartButton">Restart</button>
+        <button id="stopButton">Stop</button>
+      </div>
     </div>
     <script src="src/Game.js" type="module"></script>
   </body>
