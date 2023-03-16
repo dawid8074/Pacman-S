@@ -1,5 +1,5 @@
 import MovingDirection from "./MovingDirection.js";
-
+// etst
 export default class Enemy {
   constructor(x, y, tileSize, speed, tileMap) {
     this.x = x;
