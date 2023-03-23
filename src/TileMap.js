@@ -14,6 +14,9 @@ export default class TileMap {
 
     this.wall = new Image();
     this.wall.src = "images/wall.png";
+    
+    this.key = new Image();
+    this.key.src = "images/key.png";
 
     this.powerDot = this.pinkDot;
     this.powerDotAnmationTimerDefault = 30;
@@ -26,6 +29,7 @@ export default class TileMap {
   // 5 - empty space
   // 6 - enemy
   // 7 - power dot
+  // 8 - key
   // map = [
   //   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   //   [1, 7, 0, 0, 4, 0, 0, 0, 0, 0, 0, 7, 1],
@@ -43,19 +47,25 @@ export default class TileMap {
 
     map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 7, 0, 0, 4, 0, 0, 0, 0, 0, 0, 7, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 1, 6, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 7, 1, 1, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
-    [1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 1],
+    [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
+
+  //   map = [
+  //   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  //   [1, 7, 0, 0, 4, 0, 0, 0, 0, 0, 0, 7, 1],
+  //   [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+  //   [1, 0, 1, 6, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  //   [1, 0, 1, 7, 1, 1, 1, 0, 1, 0, 1, 0, 1],
+  //   [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
+  //   [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+  //   [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+  //   [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+  //   [1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1],
+  //   [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+  //   [1, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 1],
+  //   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  // ];
 
   draw(ctx) {
     for (let row = 0; row < this.map.length; row++) {
@@ -67,7 +77,9 @@ export default class TileMap {
           this.#drawDot(ctx, column, row, this.tileSize);
         } else if (tile == 7) {
           this.#drawPowerDot(ctx, column, row, this.tileSize);
-        } else {
+        } else if (tile == 8){
+          this.#drawKey(ctx, column, row, this.tileSize)
+        } else{
           this.#drawBlank(ctx, column, row, this.tileSize);
         }
 
@@ -109,6 +121,15 @@ export default class TileMap {
   #drawWall(ctx, column, row, size) {
     ctx.drawImage(
       this.wall,
+      column * this.tileSize,
+      row * this.tileSize,
+      size,
+      size
+    );
+  }
+  #drawKey(ctx, column, row, size){
+    ctx.drawImage(
+      this.key,
       column * this.tileSize,
       row * this.tileSize,
       size,
@@ -212,13 +233,42 @@ export default class TileMap {
   }
 
   didWin() {
-    return this.#dotsLeft() === 0;
+    // return this.#dotsLeft() === 0;
   }
 
   #dotsLeft() {
     return this.map.flat().filter((tile) => tile === 0).length;
   }
+  ateDots(){
+    return this.#dotsLeft()===0;
+  }
+  showKey(){
+    let emptySpaces = [];
 
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        if (this.map[i][j] === 5) {
+          emptySpaces.push([i, j]);
+        }
+      }
+    }
+
+    let randomPosition = emptySpaces[Math.floor(Math.random() * emptySpaces.length)];
+
+    this.map[randomPosition[0]][randomPosition[1]] = 8;
+  }
+
+  eatKey(x, y){
+    const row = y / this.tileSize;
+    const column = x / this.tileSize;
+    if (Number.isInteger(row) && Number.isInteger(column)) {
+      if (this.map[row][column] === 8) {
+        this.map[row][column] = 5;
+        return true;
+      }
+    }
+    return false;
+  }
   eatDot(x, y) {
     const row = y / this.tileSize;
     const column = x / this.tileSize;

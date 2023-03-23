@@ -11,7 +11,10 @@ const enemies = tileMap.getEnemies(velocity);
 
 let gameOver = false;
 let gameWin = false;
+let ateDots = false;
+let addKey = false;
 const gameOverSound = new Audio("sounds/gameOver.wav");
+// const gameAteDots = new Audio("XXX");
 const gameWinSound = new Audio("sounds/gameWin.wav");
 
 function gameLoop() {
@@ -20,6 +23,8 @@ function gameLoop() {
   pacman.draw(ctx, pause(), enemies);
   enemies.forEach((enemy) => enemy.draw(ctx, pause(), pacman));
   checkGameOver();
+  checkEatDotS();
+  showKey();
   checkGameWin();
 }
 
@@ -32,6 +37,22 @@ function checkGameWin() {
   }
 }
 
+function checkEatDotS(){
+  if (!ateDots) {
+    ateDots = tileMap.ateDots();
+    // if (ateDots) {
+    //   gameAteDots.play();
+    // }
+  }
+}
+function showKey(){
+  if(ateDots && !addKey)
+  {
+    addKey=true;
+    tileMap.showKey();
+  }
+}
+
 function checkGameOver() {
   if (!gameOver) {
     gameOver = isGameOver();
@@ -40,6 +61,7 @@ function checkGameOver() {
     }
   }
 }
+
 
 function isGameOver() {
   return enemies.some( //sprawdza czy jakiś element z tablicy przechodzi warunek
@@ -85,4 +107,4 @@ function drawGameEnd() {
 
 
 tileMap.setCanvasSize(canvas);
-setInterval(gameLoop, 1000 / 75);
+setInterval(gameLoop, 1000 / 65);

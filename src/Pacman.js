@@ -45,6 +45,7 @@ export default class Pacman {
     }
     this.#eatDot();
     this.#eatPowerDot();
+    this.#eatKey();
     this.#eatGhost(enemies);
 
     const size = this.tileSize / 2;
@@ -177,6 +178,11 @@ export default class Pacman {
   #eatDot() {
     if (this.tileMap.eatDot(this.x, this.y) && this.madeFirstMove) {
       this.wakaSound.play();
+    }
+  }
+  #eatKey() {
+    if (this.tileMap.eatKey(this.x, this.y) && this.madeFirstMove) {
+      console.log("te");
     }
   }
 
