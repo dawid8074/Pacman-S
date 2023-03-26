@@ -42,6 +42,9 @@ export default class Pacman {
     if (!pause) {
       this.#move();
       this.#animate();
+      this.#startAllTimers();
+    } else{
+      this.#stopAllTimers();
     }
     this.#eatDot();
     this.#eatPowerDot();
@@ -174,6 +177,18 @@ export default class Pacman {
         this.pacmanImageIndex = 0;
     }
   }
+  #stopAllTimers() {
+    console.log
+    for (let i = 0; i < this.timers.length; i++) {
+      clearTimeout(this.timers[i]);
+    }
+  }
+
+  #startAllTimers() {
+    for (let i = 0; i < this.timers.length; i++) {
+      setTimeout(this.timers[i].callback, this.timers[i].time);
+    }
+  }
 
   #eatDot() {
     if (this.tileMap.eatDot(this.x, this.y) && this.madeFirstMove) {
@@ -182,7 +197,6 @@ export default class Pacman {
   }
   #eatKey() {
     if (this.tileMap.eatKey(this.x, this.y) && this.madeFirstMove) {
-      console.log("te");
     }
   }
 

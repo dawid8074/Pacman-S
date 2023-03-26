@@ -13,9 +13,13 @@ let gameOver = false;
 let gameWin = false;
 let ateDots = false;
 let addKey = false;
+let clickPauseButton = false;
 const gameOverSound = new Audio("sounds/gameOver.wav");
 // const gameAteDots = new Audio("XXX");
 const gameWinSound = new Audio("sounds/gameWin.wav");
+
+// document.getElementById("restartButton").addEventListener("click", pauseButton);
+document.getElementById("stopButton").addEventListener("click", pauseButton);
 
 function gameLoop() {
   tileMap.draw(ctx);
@@ -26,6 +30,17 @@ function gameLoop() {
   checkEatDotS();
   showKey();
   checkGameWin();
+}
+
+function pauseButton(){
+  if(clickPauseButton){
+    clickPauseButton=false;
+    document.getElementById("stopButton").textContent="STOP";
+  } else {
+    clickPauseButton=true;
+    document.getElementById("stopButton").textContent="START";
+  }
+
 }
 
 function checkGameWin() {
@@ -70,7 +85,7 @@ function isGameOver() {
 }
 
 function pause() {
-  return !pacman.madeFirstMove || gameOver || gameWin;
+  return !pacman.madeFirstMove || gameOver || gameWin || clickPauseButton;
 }
 
 function drawGameEnd() {
