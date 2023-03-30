@@ -42,9 +42,11 @@ export default class Pacman {
     if (!pause) {
       this.#move();
       this.#animate();
-      this.#startAllTimers();
+      this.timers.forEach((timer) => timer.resume());
+      console.log("resume");
     } else{
-      this.#stopAllTimers();
+      this.timers.forEach((timer) => timer.pause());
+
     }
     this.#eatDot();
     this.#eatPowerDot();
@@ -178,13 +180,14 @@ export default class Pacman {
     }
   }
   #stopAllTimers() {
-    console.log
+    // console.log(powerDotAboutToExpireTimer);
     for (let i = 0; i < this.timers.length; i++) {
       clearTimeout(this.timers[i]);
     }
   }
 
   #startAllTimers() {
+        // console.log(powerDotAboutToExpireTimer);
     for (let i = 0; i < this.timers.length; i++) {
       setTimeout(this.timers[i].callback, this.timers[i].time);
     }
@@ -200,25 +203,67 @@ export default class Pacman {
     }
   }
 
+  Timer = function(callback, delay) {
+    var timerId, start, remaining = delay;
+    var paused=false;
+
+    this.pause = function() {
+        if(!paused)
+        {
+          window.clearTimeout(timerId);
+          timerId = null;
+          remaining -= Date.now() - start;
+          console.log(remaining);
+        }
+        paused=true;
+    };
+
+    this.resume = function() {
+      // console.log("4321");
+      paused=false;
+        if (timerId) {
+            return;
+        }
+
+        start = Date.now();
+        timerId = window.setTimeout(callback, remaining);
+    };
+    
+    this.stop = function() {
+      window.clearTimeout(timerId);
+  };
+
+    this.resume();
+};
+
   #eatPowerDot() {
     if (this.tileMap.eatPowerDot(this.x, this.y)) {
       this.powerDotSound.play();
       this.powerDotActive = true;
       this.powerDotAboutToExpire = false;
-      this.timers.forEach((timer) => clearTimeout(timer));
+      // this.timers.forEach((timer) => clearTimeout(timer));
+      this.timers.forEach((timer) => timer.stop());
       this.timers = [];
 
-      let powerDotTimer = setTimeout(() => {
+
+      let powerDotTimer= new this.Timer(() => {
         this.powerDotActive = false;
         this.powerDotAboutToExpire = false;
       }, 1000 * 6);
+      // let powerDotTimer = setTimeout(() => {
+      //   this.powerDotActive = false;
+      //   this.powerDotAboutToExpire = false;
+      // }, 1000 * 6);
 
       this.timers.push(powerDotTimer);
 
-      let powerDotAboutToExpireTimer = setTimeout(() => {
+      let powerDotAboutToExpireTimer= new this.Timer(() => {
         this.powerDotAboutToExpire = true;
       }, 1000 * 3);
 
+      // let powerDotAboutToExpireTimer = setTimeout(() => {
+      //   this.powerDotAboutToExpire = true;
+      // }, 1000 * 3);
       this.timers.push(powerDotAboutToExpireTimer);
     }
   }
