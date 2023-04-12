@@ -2,6 +2,9 @@ import Pacman from "./Pacman.js";
 import Enemy from "./Enemy.js";
 import MovingDirection from "./MovingDirection.js";
 
+let lvl;
+let map;
+
 export default class TileMap {
   constructor(tileSize) {
     this.tileSize = tileSize;
@@ -22,6 +25,7 @@ export default class TileMap {
     this.powerDotAnmationTimerDefault = 30;
     this.powerDotAnmationTimer = this.powerDotAnmationTimerDefault;
   }
+
 
   // 1 - wall
   // 0 - dots
@@ -45,13 +49,13 @@ export default class TileMap {
   // ];
 
 
-  //   map = [
-  //   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  //   [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  //   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  // ];
-
     map = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+
+    map2 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 7, 0, 0, 4, 0, 0, 0, 0, 0, 0, 7, 1],
     [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
@@ -67,10 +71,21 @@ export default class TileMap {
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
 
-  draw(ctx) {
+  draw(ctx, lvl) {
+    if(lvl!=1)
+      this.map = this.map2;
+    console.log(this.map);
     for (let row = 0; row < this.map.length; row++) {
       for (let column = 0; column < this.map[row].length; column++) {
-        let tile = this.map[row][column];
+        
+        let tile=this.map[row][column];
+
+        // let tile;
+        // if(lvl===1)
+        //   tile = this.map1[row][column];
+        // else
+        //   tile = this.map2[row][column];
+        
         if (tile === 1) {
           this.#drawWall(ctx, column, row, this.tileSize);
         } else if (tile === 0) {
@@ -233,7 +248,7 @@ export default class TileMap {
   }
 
   didWin() {
-    // return this.#dotsLeft() === 0;
+    return this.#dotsLeft() === 0 && lvl===2;
   }
 
   #dotsLeft() {
@@ -241,6 +256,13 @@ export default class TileMap {
   }
   ateDots(){
     return this.#dotsLeft()===0;
+  }
+
+  #KeyLeft(){
+    return this.map.flat().filter((tile) => tile === 8)==0;
+  }
+  ateKey(){
+    return this.#KeyLeft();
   }
   showKey(){
     let emptySpaces = [];

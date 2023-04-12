@@ -43,7 +43,6 @@ export default class Pacman {
       this.#move();
       this.#animate();
       this.timers.forEach((timer) => timer.resume());
-      console.log("resume");
     } else{
       this.timers.forEach((timer) => timer.pause());
 
@@ -200,6 +199,10 @@ export default class Pacman {
   }
   #eatKey() {
     if (this.tileMap.eatKey(this.x, this.y) && this.madeFirstMove) {
+
+
+
+
     }
   }
 

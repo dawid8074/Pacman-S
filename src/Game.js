@@ -13,6 +13,7 @@ let gameOver = false;
 let gameWin = false;
 let ateDots = false;
 let addKey = false;
+let lvl=1;
 let clickPauseButton = false;
 const gameOverSound = new Audio("sounds/gameOver.wav");
 // const gameAteDots = new Audio("XXX");
@@ -22,13 +23,14 @@ const gameWinSound = new Audio("sounds/gameWin.wav");
 document.getElementById("stopButton").addEventListener("click", pauseButton);
 
 function gameLoop() {
-  tileMap.draw(ctx);
+  tileMap.draw(ctx, lvl);
   drawGameEnd();
   pacman.draw(ctx, pause(), enemies);
   enemies.forEach((enemy) => enemy.draw(ctx, pause(), pacman));
   checkGameOver();
   checkEatDotS();
   showKey();
+  checkEatKey();
   checkGameWin();
 }
 
@@ -55,6 +57,7 @@ function checkGameWin() {
 function checkEatDotS(){
   if (!ateDots) {
     ateDots = tileMap.ateDots();
+    // console.log(ateDots);
     // if (ateDots) {
     //   gameAteDots.play();
     // }
@@ -67,6 +70,17 @@ function showKey(){
     tileMap.showKey();
   }
 }
+
+
+function checkEatKey(){
+  // console.log(tileMap.eatKey==true);
+  if(addKey && tileMap.ateKey()){
+   lvl++;
+  }
+}
+
+
+
 
 function checkGameOver() {
   if (!gameOver) {
