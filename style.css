@@ -11,11 +11,15 @@
   max-width: 800px;
   margin: 0 auto;
 }
-/* #game {
-  width: 55vh;
-  height: 90vh;
+#game {
+  /* width: 55vh;
+  height: 90vh; */
   margin: 0 auto;
-} */
+}
+
+h3 {
+  margin-top: 0px;
+}
 
 h1 {
   margin: 0px;
