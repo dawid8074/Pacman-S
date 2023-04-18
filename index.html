@@ -13,7 +13,13 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div>
+    <div id="modal" class="hidden">
+      <div id="modal-content">
+        <h2 class="neon-pulse">Pause</h2>
+        <button id="close-modal" class="neon-button">Resume</button>
+      </div>
+    </div>
+    <div id="game">
       <h1>Pac-Man</h1>
       <h3>Level 1</h3>
       <canvas id="gameCanvas"></canvas>

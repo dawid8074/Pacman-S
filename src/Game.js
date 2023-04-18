@@ -21,6 +21,7 @@ const gameWinSound = new Audio("sounds/gameWin.wav");
 
 // document.getElementById("restartButton").addEventListener("click", pauseButton);
 document.getElementById("stopButton").addEventListener("click", pauseButton);
+document.getElementById("close-modal").addEventListener("click", resumeButton);
 
 function gameLoop() {
   tileMap.draw(ctx, lvl);
@@ -34,13 +35,31 @@ function gameLoop() {
   checkGameWin();
 }
 
-function pauseButton(){
+function resumeButton(){
+  const modal = document.querySelector('#modal');
+  const modalVisible = modal.style.display === 'flex';
+
+  if (modalVisible) {
+    modal.style.display = 'none';
+  }
   if(clickPauseButton){
     clickPauseButton=false;
-    document.getElementById("stopButton").textContent="STOP";
+  } 
+}
+
+function pauseButton(){
+  const modal = document.querySelector('#modal');
+  const modalVisible = modal.style.display === 'flex';
+
+  if (modalVisible) {
+    modal.style.display = 'none';
+  } else {
+    modal.style.display = 'flex';
+  }
+  if(clickPauseButton){
+    clickPauseButton=false;
   } else {
     clickPauseButton=true;
-    document.getElementById("stopButton").textContent="START";
   }
 
 }
