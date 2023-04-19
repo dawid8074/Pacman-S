@@ -3,7 +3,7 @@ import Enemy from "./Enemy.js";
 import MovingDirection from "./MovingDirection.js";
 
 let lvl;
-let map;
+let maps=[];
 
 export default class TileMap {
   constructor(tileSize) {
@@ -24,6 +24,15 @@ export default class TileMap {
     this.powerDot = this.pinkDot;
     this.powerDotAnmationTimerDefault = 30;
     this.powerDotAnmationTimer = this.powerDotAnmationTimerDefault;
+
+
+
+  maps.push(this.map);
+  maps.push(this.map2);
+  maps.push(this.map3);
+  maps.push(this.map4);
+  maps.push(this.map5);
+
   }
 
 
@@ -54,7 +63,7 @@ export default class TileMap {
     [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
-
+  
     map2 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 7, 0, 0, 4, 0, 0, 0, 0, 0, 0, 7, 1],
@@ -122,21 +131,20 @@ export default class TileMap {
     [1, 6, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 1, 6, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
+  MaxLvl(){
+    return maps.length;
+  }
 
-  draw(ctx, lvl) {
-    if(lvl!=1)
-      this.map = this.map2;
-    console.log(this.map);
+  changeMap(lvl)
+  {
+    this.map=maps[lvl-1];
+  }
+
+  draw(ctx,lvl) {
     for (let row = 0; row < this.map.length; row++) {
       for (let column = 0; column < this.map[row].length; column++) {
         
         let tile=this.map[row][column];
-
-        // let tile;
-        // if(lvl===1)
-        //   tile = this.map1[row][column];
-        // else
-        //   tile = this.map2[row][column];
         
         if (tile === 1) {
           this.#drawWall(ctx, column, row, this.tileSize);
@@ -300,13 +308,13 @@ export default class TileMap {
   }
 
   didWin() {
-    return this.#dotsLeft() === 0 && lvl===2;
+    return this.#dotsLeft() === 0;
   }
 
   #dotsLeft() {
     return this.map.flat().filter((tile) => tile === 0).length;
   }
-  ateDots(){
+  checkAteDots(){
     return this.#dotsLeft()===0;
   }
 

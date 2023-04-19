@@ -199,10 +199,6 @@ export default class Pacman {
   }
   #eatKey() {
     if (this.tileMap.eatKey(this.x, this.y) && this.madeFirstMove) {
-
-
-
-
     }
   }
 
@@ -216,7 +212,6 @@ export default class Pacman {
           window.clearTimeout(timerId);
           timerId = null;
           remaining -= Date.now() - start;
-          console.log(remaining);
         }
         paused=true;
     };

@@ -6,14 +6,19 @@ const velocity = 2;
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const tileMap = new TileMap(tileSize);
-const pacman = tileMap.getPacman(velocity);
-const enemies = tileMap.getEnemies(velocity);
 
+let pacman = tileMap.getPacman(velocity);
+let enemies = tileMap.getEnemies(velocity);
+
+
+let lvl=1;
+let maxlvl=2;
 let gameOver = false;
 let gameWin = false;
 let ateDots = false;
 let addKey = false;
-let lvl=1;
+let ateKey = false;
+
 let clickPauseButton = false;
 const gameOverSound = new Audio("sounds/gameOver.wav");
 // const gameAteDots = new Audio("XXX");
@@ -24,7 +29,8 @@ document.getElementById("stopButton").addEventListener("click", pauseButton);
 document.getElementById("close-modal").addEventListener("click", resumeButton);
 
 function gameLoop() {
-  tileMap.draw(ctx, lvl);
+  
+  tileMap.draw(ctx,lvl);
   drawGameEnd();
   pacman.draw(ctx, pause(), enemies);
   enemies.forEach((enemy) => enemy.draw(ctx, pause(), pacman));
@@ -33,6 +39,7 @@ function gameLoop() {
   showKey();
   checkEatKey();
   checkGameWin();
+  checkGoNewLvl();
 }
 
 function resumeButton(){
@@ -64,41 +71,52 @@ function pauseButton(){
 
 }
 
-function checkGameWin() {
-  if (!gameWin) {
-    gameWin = tileMap.didWin();
-    if (gameWin) {
-      gameWinSound.play();
-    }
-  }
-}
-
 function checkEatDotS(){
   if (!ateDots) {
-    ateDots = tileMap.ateDots();
-    // console.log(ateDots);
-    // if (ateDots) {
-    //   gameAteDots.play();
-    // }
+    ateDots = tileMap.checkAteDots();
   }
 }
 function showKey(){
   if(ateDots && !addKey)
   {
-    addKey=true;
     tileMap.showKey();
+    addKey=true;
   }
 }
 
 
 function checkEatKey(){
-  // console.log(tileMap.eatKey==true);
   if(addKey && tileMap.ateKey()){
-   lvl++;
+   ateDots=false;
+   addKey=false;
+   ateKey=true;
   }
 }
 
+function checkGameWin() {
+  if(!gameWin){
+    if(lvl==maxlvl && ateKey){
+    gameWin=true;
+    }
+  }
 
+  if(gameWin){
+    gameWinSound.play();
+  }
+}
+
+function checkGoNewLvl(){
+  if(!gameWin && ateKey){
+    lvl++;
+    tileMap.changeMap(lvl);
+    pacman = tileMap.getPacman(velocity);
+    enemies = tileMap.getEnemies(velocity);
+    tileMap.setCanvasSize(canvas);
+
+    document.getElementById("lvl").innerHTML="Level "+lvl;
+    ateKey=false;
+  }
+}
 
 
 function checkGameOver() {
@@ -112,7 +130,7 @@ function checkGameOver() {
 
 
 function isGameOver() {
-  return enemies.some( //sprawdza czy jakiś element z tablicy przechodzi warunek
+  return enemies.some(
     (enemy) => !pacman.powerDotActive && enemy.collideWith(pacman)
   );
 }
@@ -152,7 +170,10 @@ function drawGameEnd() {
     ctx.fillText(text, x, y);
   }
 }
+function setMaxLvl(){
+  maxlvl=tileMap.MaxLvl();
+}
 
-
+setMaxLvl();
 tileMap.setCanvasSize(canvas);
 setInterval(gameLoop, 1000 / 65);
